@@ -8,6 +8,8 @@ This file creates your application.
 from app import app
 from flask import render_template, request
 from .forms import UploadForm
+from werkzeug.utils import secure_filename
+import os
 
 ###
 # Routing for your application.
@@ -17,22 +19,23 @@ from .forms import UploadForm
 def upload():
     form = UploadForm()
 
-    if request.method = "POST" and form.validate_on_submit():
+    if request.method == "POST" and form.validate_on_submit():
         img = form.photo.data
         descritpiton = form.description.data
         filename = secure_filename(img.filename)
         img.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
 
         data =  {
-                    "message": "File Upload Successful"
-                    "filename": "" + filename
-                    "description": "" + descritpiton
+                    "message": "File Upload Successful",
+                    "filename": "you uploaded " + filename, 
+                    "description": descritpiton
                 }
     else:
+        upload_errors = form_errors(form)
         data =  {
                     "errors": [
-                        {},
-                        {}
+                        {upload_errors[0]},
+                        {upload_errors[[1]]}
                     ]
                 }
 
