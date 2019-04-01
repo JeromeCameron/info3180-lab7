@@ -36,7 +36,7 @@ const upload_form = Vue.component('upload_form', {
     template: `
         <div id="main">
             <h2 id="heading">Upload Form</h2>
-            <p class = "alert-success" v-show="success">{{message}}</p>
+            <p class = "alert-success" v-if="success">{{message}}</p>
             <form @submit.prevent="uploadPhoto" method="POST" id = "uploadForm">
                 <label for="description" class="form-group">Description</label><br>
                 <textarea form="uploadForm" name="description" class="form-group" id="description"></textarea><br>
@@ -45,22 +45,13 @@ const upload_form = Vue.component('upload_form', {
                 <button type="submit" name="submit" class="btn btn-primary">Upload file</button>
             </form>
 
-            <ul class = "alert-danger" v-show="errors">
+            <ul class = "alert-danger" v-if="errors">
                 <li  v-for="err in messages">
                     {{ err }}
                 </li> 
             </ul> 
         </div>
     `,
-
-    data: function() {
-        return {
-            message: "",
-            messages: [],
-            success: true,
-            errors: true
-        }
-     }.bind(this),
 
     methods:{
         uploadPhoto: function(){
@@ -89,7 +80,6 @@ const upload_form = Vue.component('upload_form', {
                 if ('errors' in store){
                     this.errors = true;
                     this.messages = store['errors'];
-                    console.log(this.messages);
                 }else{
                     this.success = true;
                     this.message = store; 
@@ -101,6 +91,15 @@ const upload_form = Vue.component('upload_form', {
                 });
         }.bind(this)
     },
+
+    data: function() {
+        return {
+            message: "",
+            messages: [],
+            success: false,
+            errors: false
+        }
+     }.bind(this)
 
 });
 
