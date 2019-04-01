@@ -1,3 +1,22 @@
 body {
     padding-top: 5rem;
 }
+
+#uploadForm{
+    width: 500px;
+}
+
+#description{
+    width: 600px;
+}
+
+h2, button{
+    margin-bottom: 20px;
+}
+
+label{
+    font-weight: 500;
+}
+#heading{
+    font-weight: 900;
+}

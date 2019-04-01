@@ -1,4 +1,5 @@
 /* Add your Application JavaScript */
+
 Vue.component('app-header', {
     template: `
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
@@ -33,12 +34,33 @@ Vue.component('app-footer', {
 
 const upload_form = Vue.component('upload_form', {
     template: `
-        <form @submit.prevent="uploadPhoto" method="POST" id = "uploadForm">
-            <input type="text" name="description"/><br>
-            <input type="file" name="photo"/><br>
-            <button type="submit" name="submit" class="btn btn-primary">Upload file</button>
-        </form>
+        <div id="main">
+            <h2 id="heading">Upload Form</h2>
+            <p class = "alert-success" v-show="success">{{message}}</p>
+            <form @submit.prevent="uploadPhoto" method="POST" id = "uploadForm">
+                <label for="description" class="form-group">Description</label><br>
+                <textarea form="uploadForm" name="description" class="form-group" id="description"></textarea><br>
+                <label for="photo" class="form-group">Photo Upload</label><br>
+                <input type="file" name="photo" class="form-group"/><br>
+                <button type="submit" name="submit" class="btn btn-primary">Upload file</button>
+            </form>
+
+            <ul class = "alert-danger" v-show="errors">
+                <li  v-for="err in messages">
+                    {{ err }}
+                </li> 
+            </ul> 
+        </div>
     `,
+
+    data: function() {
+        return {
+            message: "",
+            messages: [],
+            success: true,
+            errors: true
+        }
+     }.bind(this),
 
     methods:{
         uploadPhoto: function(){
@@ -62,12 +84,24 @@ const upload_form = Vue.component('upload_form', {
                 
                // display a success message
                 console.log(jsonResponse);
+                let store = jsonResponse['data'];
+
+                if ('errors' in store){
+                    this.errors = true;
+                    this.messages = store['errors'];
+                    console.log(this.messages);
+                }else{
+                    this.success = true;
+                    this.message = store; 
+                }
+
                 })
                 .catch(function (error) {
                 console.log(error);
                 });
-        }
-    }
+        }.bind(this)
+    },
+
 });
 
 const Home = Vue.component('home', {
